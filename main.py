@@ -1,4 +1,5 @@
 import os
+from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 
 import numpy as np
 import pandas as pd
@@ -67,11 +68,18 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Define and compile the LSTM model
 model = Sequential([
-    LSTM(50, activation='relu', input_shape=(X.shape[1], 1)),
-    Dropout(0.2),
+    LSTM(100, activation='relu', return_sequences=True, input_shape=(X.shape[1], 1)),
+    Dropout(0.3),
+    LSTM(50, activation='relu'),
+    Dropout(0.3),
     Dense(1)
 ])
 model.compile(optimizer='adam', loss='mse')
+
+# Define callbacks for learning rate adjustment and early stopping
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
+early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+
 
 plot_losses = PlotLosses()
 
@@ -88,13 +96,14 @@ if os.path.exists(checkpoint_path):
 history = model.fit(
     X_train, y_train,
     epochs=500,
-    batch_size=72,
+    batch_size=64,  # Adjusted batch size
     validation_split=0.2,
     verbose=1,
-    callbacks=[plot_losses, checkpoint]  # Add the checkpoint callback here
+    callbacks=[plot_losses, checkpoint, reduce_lr, early_stopping]
 )
+
 # Train the model with a validation split and the custom plotting callback
-history = model.fit(X_train, y_train, epochs=500, batch_size=100, validation_split=0.2, verbose=1,
+history = model.fit(X_train, y_train, epochs=500, batch_size=64, validation_split=0.2, verbose=1,
                     callbacks=[plot_losses])
 
 # Save training history to JSON
