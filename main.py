@@ -1,4 +1,3 @@
-# Import necessary libraries
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -6,6 +5,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+import json
 
 # Global variable for time steps used in the sequences
 time_steps = 24
@@ -18,7 +18,6 @@ def load_and_preprocess_data(filepath):
     data_normalized = scaler.fit_transform(data)
     return data_normalized, scaler
 
-# Create sequences from data
 def create_sequences(data, time_steps):
     X, y = [], []
     for i in range(len(data) - time_steps):
@@ -41,8 +40,9 @@ if __name__ == "__main__":
     X, y = create_sequences(data_normalized, time_steps)
     X = X.reshape((X.shape[0], X.shape[1], 1))
 
-    # Split data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Split data into training, validation, and testing sets
+    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
     # Define and compile the LSTM model
     model = Sequential([
@@ -53,7 +53,11 @@ if __name__ == "__main__":
     model.compile(optimizer='adam', loss='mse')
 
     # Train the model
-    history = model.fit(X_train, y_train, epochs=20, batch_size=72, validation_split=0.2, verbose=1)
+    history = model.fit(X_train, y_train, epochs=20, batch_size=72, validation_data=(X_val, y_val), verbose=1)
+
+    # Save training and validation loss to a JSON file
+    with open('training_validation_results.json', 'w') as f:
+        json.dump(history.history, f)
 
     # Evaluate the model
     test_loss = model.evaluate(X_test, y_test, verbose=1)
@@ -66,3 +70,8 @@ if __name__ == "__main__":
     # Forecast future energy consumption
     forecasted_consumption = forecast(model, recent_data, scaler, time_steps)
     print(f"Forecasted Energy Consumption: {forecasted_consumption[0][0]}")
+
+    # Save forecast result to a JSON file
+    forecast_result = {'forecasted_consumption': forecasted_consumption[0][0].tolist()}
+    with open('forecast_result.json', 'w') as f:
+        json.dump(forecast_result, f)
