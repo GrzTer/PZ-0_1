@@ -1,6 +1,9 @@
+import os
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+from keras.src.callbacks import ModelCheckpoint
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from sklearn.preprocessing import MinMaxScaler
@@ -72,8 +75,26 @@ model.compile(optimizer='adam', loss='mse')
 
 plot_losses = PlotLosses()
 
+# Define a checkpoint callback
+checkpoint_path = "model_checkpoint.h5"
+checkpoint = ModelCheckpoint(checkpoint_path, monitor='val_loss', verbose=1, save_best_only=True, mode='min')
+
+# Check if a previous checkpoint exists
+if os.path.exists(checkpoint_path):
+    print(f"Loading weights from {checkpoint_path}")
+    model.load_weights(checkpoint_path)
+
+# Modify the model.fit call to include the checkpoint callback
+history = model.fit(
+    X_train, y_train,
+    epochs=500,
+    batch_size=72,
+    validation_split=0.2,
+    verbose=1,
+    callbacks=[plot_losses, checkpoint]  # Add the checkpoint callback here
+)
 # Train the model with a validation split and the custom plotting callback
-history = model.fit(X_train, y_train, epochs=500, batch_size=72, validation_split=0.2, verbose=1,
+history = model.fit(X_train, y_train, epochs=500, batch_size=100, validation_split=0.2, verbose=1,
                     callbacks=[plot_losses])
 
 # Save training history to JSON
