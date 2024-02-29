@@ -96,7 +96,7 @@ if os.path.exists(checkpoint_path):
 # Train the model
 history = model.fit(
     X_train, y_train,
-    epochs=500,
+    epochs=100,
     batch_size=256,
     validation_split=0.2,
     callbacks=[reduce_lr, plot_losses, checkpoint], # early stopping
