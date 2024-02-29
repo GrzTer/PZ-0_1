@@ -7,10 +7,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import json
 
-# Global variable for time steps used in the sequences
 time_steps = 24
 
-# Load and preprocess data function
 def load_and_preprocess_data(filepath):
     df = pd.read_csv(filepath)
     data = df['energy_consumption'].values.reshape(-1, 1)
@@ -25,7 +23,6 @@ def create_sequences(data, time_steps):
         y.append(data[i + time_steps])
     return np.array(X), np.array(y)
 
-# Forecasting function
 def forecast(model, recent_data, scaler, time_steps):
     recent_data_scaled = scaler.transform(recent_data.reshape(-1, 1))
     X_recent = recent_data_scaled.reshape(1, time_steps, 1)
@@ -33,45 +30,38 @@ def forecast(model, recent_data, scaler, time_steps):
     prediction = scaler.inverse_transform(prediction_scaled)
     return prediction
 
-# Main program
-if __name__ == "__main__":
-    # Load and preprocess historical data
-    data_normalized, scaler = load_and_preprocess_data('data.csv')
-    X, y = create_sequences(data_normalized, time_steps)
-    X = X.reshape((X.shape[0], X.shape[1], 1))
+def save_to_json(data, filename):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=4)
 
-    # Split data into training, validation, and testing sets
-    X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
-    X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+data_normalized, scaler = load_and_preprocess_data('data.csv')
+X, y = create_sequences(data_normalized, time_steps)
+X = X.reshape((X.shape[0], X.shape[1], 1))
 
-    # Define and compile the LSTM model
-    model = Sequential([
-        LSTM(50, activation='relu', input_shape=(X.shape[1], 1)),
-        Dropout(0.2),
-        Dense(1)
-    ])
-    model.compile(optimizer='adam', loss='mse')
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
 
-    # Train the model
-    history = model.fit(X_train, y_train, epochs=20, batch_size=72, validation_data=(X_val, y_val), verbose=1)
+model = Sequential([
+    LSTM(50, activation='relu', input_shape=(X.shape[1], 1)),
+    Dropout(0.2),
+    Dense(1)
+])
 
-    # Save training and validation loss to a JSON file
-    with open('training_validation_results.json', 'w') as f:
-        json.dump(history.history, f)
+model.compile(optimizer='adam', loss='mse')
 
-    # Evaluate the model
-    test_loss = model.evaluate(X_test, y_test, verbose=1)
-    print(f"Test loss: {test_loss}")
+history = model.fit(X_train, y_train, epochs=20, batch_size=72, validation_data=(X_val, y_val), verbose=1)
 
-    # Load the most recent data for forecasting
-    df = pd.read_csv('data.csv')
-    recent_data = df['energy_consumption'].values[-time_steps:].reshape(-1, 1)
+test_loss = model.evaluate(X_test, y_test, verbose=1)
+print(f"Test loss: {test_loss}")
 
-    # Forecast future energy consumption
-    forecasted_consumption = forecast(model, recent_data, scaler, time_steps)
-    print(f"Forecasted Energy Consumption: {forecasted_consumption[0][0]}")
+recent_data = df['energy_consumption'].values[-time_steps:].reshape(-1, 1)
+forecasted_consumption = forecast(model, recent_data, scaler, time_steps)
 
-    # Save forecast result to a JSON file
-    forecast_result = {'forecasted_consumption': forecasted_consumption[0][0].tolist()}
-    with open('forecast_result.json', 'w') as f:
-        json.dump(forecast_result, f)
+# Saving training and validation history
+history_dict = history.history
+history_dict['test_loss'] = test_loss
+save_to_json(history_dict, 'training_validation_results.json')
+
+# Saving forecast results
+forecast_result = {'forecasted_energy_consumption': forecasted_consumption.flatten().tolist()}
+save_to_json(forecast_result, 'forecast_results.json')
