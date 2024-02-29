@@ -14,7 +14,7 @@ from tensorflow.keras.callbacks import Callback, ReduceLROnPlateau, EarlyStoppin
 tf.random.set_seed(42)
 np.random.seed(42)
 
-time_steps = 1
+time_steps = 24
 
 # Define callbacks
 class PlotLosses(Callback):
@@ -79,7 +79,7 @@ model = Sequential([
 model.compile(optimizer='adam', loss='mse')
 
 # Callbacks
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2, patience=5, min_lr=0.001)
+reduce_lr = ReduceLROnPlateau(factor=0.1, patience=10, min_lr=0.00001, monitor='val_loss')
 # early_stopping = EarlyStopping(monitor='val_loss', patience=100)
 plot_losses = PlotLosses()
 checkpoint_path = "model_checkpoint.h5"
@@ -97,9 +97,9 @@ if os.path.exists(checkpoint_path):
 history = model.fit(
     X_train, y_train,
     epochs=100,
-    batch_size=256,
+    batch_size=78336,
     validation_split=0.2,
-    callbacks=[reduce_lr, plot_losses, checkpoint], # early stopping
+    callbacks=[checkpoint, reduce_lr, plot_losses], # early stopping
     verbose=1
 )
 
