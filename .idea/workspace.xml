@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c076a164-bac9-4b65-8f4b-f3e7afdead64" name="Changes" comment="...">
+      <change afterPath="$PROJECT_DIR$/myplot.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/myplot2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_checkpoint.h5" beforeDir="false" afterPath="$PROJECT_DIR$/model_checkpoint.h5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/training_history.json" beforeDir="false" afterPath="$PROJECT_DIR$/training_history.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -255,7 +259,7 @@
       <option name="presentableId" value="Default" />
       <updated>1709218278642</updated>
       <workItem from="1709218282185" duration="408000" />
-      <workItem from="1709218798367" duration="7489000" />
+      <workItem from="1709218798367" duration="9131000" />
     </task>
     <task id="LOCAL-00001" summary="...">
       <option name="closed" value="true" />
@@ -313,7 +317,15 @@
       <option name="project" value="LOCAL" />
       <updated>1709225950508</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="...">
+      <option name="closed" value="true" />
+      <created>1709226576348</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1709226576348</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -329,6 +341,6 @@
     <SUITE FILE_PATH="coverage/PZ_0_1$gendata.coverage" NAME="gendata Coverage Results" MODIFIED="1709222982669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MZE_0_1$data.coverage" NAME="data Coverage Results" MODIFIED="1709219126275" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/MZE_0_1$main.coverage" NAME="main Coverage Results" MODIFIED="1709219847334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PZ_0_1$main.coverage" NAME="main Coverage Results" MODIFIED="1709226206544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PZ_0_1$main.coverage" NAME="main Coverage Results" MODIFIED="1709227681717" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
