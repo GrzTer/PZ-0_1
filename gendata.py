@@ -1,87 +1,59 @@
-import numpy as np
 import pandas as pd
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.model_selection import train_test_split
-import json
-import matplotlib.pyplot as plt
-import joblib
-import time
+import numpy as np
 import os
+from datetime import datetime, timedelta
 
-# Constants
-time_steps = 24
 
-# Function to load and preprocess data
-def load_and_preprocess_data(filepath):
-    df = pd.read_csv(filepath)
-    data = df['energy_consumption'].values.reshape(-1, 1)
-    scaler = MinMaxScaler(feature_range=(0, 1))
-    data_normalized = scaler.fit_transform(data)
-    return data_normalized, scaler, df
+def generate_daily_data(start_date, filename='data.csv'):
+    # Settings for dummy data generation for one day
+    n_days = 1  # Generate data for one day
+    hours_per_day = 24
+    total_hours = n_days * hours_per_day
 
-# Function to create sequences
-def create_sequences(data, time_steps):
-    X, y = [], []
-    for i in range(len(data) - time_steps):
-        X.append(data[i:(i + time_steps)])
-        y.append(data[i + time_steps])
-    return np.array(X), np.array(y)
+    # Determine the start date for the new data
+    if os.path.exists(filename):
+        df = pd.read_csv(filename)
+        last_date = pd.to_datetime(df['timestamp'].iloc[-1])
+        start_date = last_date + timedelta(hours=1)
+    else:
+        start_date = pd.to_datetime(start_date)
 
-# Function to forecast future energy consumption
-def forecast(model, recent_data, scaler, time_steps):
-    recent_data_scaled = scaler.transform(recent_data.reshape(-1, 1))
-    X_recent = recent_data_scaled.reshape(1, time_steps, 1)
-    prediction_scaled = model.predict(X_recent)
-    prediction = scaler.inverse_transform(prediction_scaled)
-    return prediction
+    # Time series for one day
+    time_series = pd.date_range(start=start_date, periods=total_hours, freq="H")
 
-# Continuous learning loop
-def continuous_learning_loop(filepath, model_path, scaler_path, check_interval=3600):
-    while True:
-        # Check for the existence of the model and scaler, load if exist
-        if os.path.exists(model_path) and os.path.exists(scaler_path):
-            model = tf.keras.models.load_model(model_path)
-            scaler = joblib.load(scaler_path)
-        else:
-            model, scaler = None, None  # Initialize these properly as needed
+    # Simulate daily patterns and trends
+    np.random.seed(42)  # Ensure reproducibility
+    daily_pattern = np.sin(np.arange(hours_per_day) * (2 * np.pi / hours_per_day))
 
-        data_normalized, scaler, df = load_and_preprocess_data(filepath)
-        X, y = create_sequences(data_normalized, time_steps)
-        X = X.reshape((X.shape[0], X.shape[1], 1))
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # Assuming trend continues from the last value if data exists
+    if os.path.exists(filename):
+        trend_start = df['energy_consumption'].iloc[-1]
+    else:
+        trend_start = 100  # Starting point of the trend for the new data
+    trend = np.linspace(trend_start, trend_start + 2, total_hours)  # Minimal trend increase
 
-        if model is None:
-            # Define and compile a new LSTM model if not loaded
-            model = Sequential([
-                LSTM(50, activation='relu', input_shape=(X.shape[1], 1)),
-                Dropout(0.2),
-                Dense(1)
-            ])
-            model.compile(optimizer='adam', loss='mse')
+    # Add random noise
+    noise = np.random.normal(loc=0, scale=5, size=total_hours)
 
-        # Train the model with a validation split
-        history = model.fit(X_train, y_train, epochs=5, batch_size=72, validation_split=0.2, verbose=1)
+    # Simulate energy consumption for one day
+    energy_consumption = trend + 25 * daily_pattern + noise
 
-        # Visualization
-        labels = ['Training Data', 'Validation Data']
-        sizes = [len(X_train), len(X_train) * 0.2]  # 20% data is for validation as per validation_split
-        colors = ['skyblue', 'yellowgreen']
-        explode = (0.1, 0)  # explode the first slice
+    # Create DataFrame
+    daily_df = pd.DataFrame({
+        'timestamp': time_series,
+        'energy_consumption': energy_consumption
+    })
 
-        plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=140)
-        plt.axis('equal')
-        plt.title('Distribution of Data for Latest Training Cycle')
-        plt.show()
+    # Append or save to CSV
+    if os.path.exists(filename):
+        df = pd.read_csv(filename)
+        df = pd.concat([df, daily_df])
+        df.to_csv(filename, index=False)
+    else:
+        daily_df.to_csv(filename, index=False)
 
-        # Save the updated model and scaler
-        model.save(model_path)
-        joblib.dump(scaler, scaler_path)
+    print(f"Daily data generated and appended to '{filename}'.")
 
-        # Sleep before the next check
-        time.sleep(check_interval)
 
-if __name__ == "__main__":
-    continuous_learning_loop('data.csv', 'lstm_model.h5', 'scaler.save')
+# Example usage
+generate_daily_data("2020-01-01")
