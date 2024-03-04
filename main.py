@@ -11,10 +11,10 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.callbacks import Callback, ReduceLROnPlateau, EarlyStopping, ModelCheckpoint
 
 # Set seed for reproducibility
-tf.random.set_seed(42)
-np.random.seed(42)
+tf.random.set_seed(84)
+np.random.seed(84)
 
-time_steps = 24
+time_steps = 1
 
 # Define callbacks
 class PlotLosses(Callback):
@@ -66,7 +66,7 @@ X, y = create_sequences(data_normalized, time_steps)
 X = X.reshape((X.shape[0], X.shape[1], 1))
 
 # Split data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=84)
 
 # Define LSTM model
 model = Sequential([
@@ -96,7 +96,7 @@ if os.path.exists(checkpoint_path):
 # Train the model
 history = model.fit(
     X_train, y_train,
-    epochs=100,
+    epochs=1000,
     batch_size=78336,
     validation_split=0.2,
     callbacks=[checkpoint, reduce_lr, plot_losses], # early stopping

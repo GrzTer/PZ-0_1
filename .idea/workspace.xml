@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c076a164-bac9-4b65-8f4b-f3e7afdead64" name="Changes" comment="preReset">
-      <change afterPath="$PROJECT_DIR$/data.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/forecast_results.json" afterDir="false" />
+    <list default="true" id="c076a164-bac9-4b65-8f4b-f3e7afdead64" name="Changes" comment=".">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model_checkpoint.h5" beforeDir="false" afterPath="$PROJECT_DIR$/model_checkpoint.h5" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +42,8 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Desktop/MZE-0_1&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Desktop/Naukolatek_RTEM&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -105,7 +102,8 @@
       <updated>1709218278642</updated>
       <workItem from="1709218282185" duration="408000" />
       <workItem from="1709218798367" duration="10935000" />
-      <workItem from="1709236755369" duration="669000" />
+      <workItem from="1709236755369" duration="1408000" />
+      <workItem from="1709536780684" duration="41000" />
     </task>
     <task id="LOCAL-00001" summary="...">
       <option name="closed" value="true" />
