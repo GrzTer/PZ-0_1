@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c076a164-bac9-4b65-8f4b-f3e7afdead64" name="Changes" comment="." />
+    <list default="true" id="c076a164-bac9-4b65-8f4b-f3e7afdead64" name="Changes" comment=".">
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,7 +43,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "mm",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Admin/Desktop/MZE-0_1",
+    "last_opened_file_path": "C:/Users/Admin/Desktop/PZ-0_1",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -103,6 +105,7 @@
       <workItem from="1709236755369" duration="1408000" />
       <workItem from="1709536780684" duration="41000" />
       <workItem from="1709538977716" duration="523000" />
+      <workItem from="1710101707123" duration="34000" />
     </task>
     <task id="LOCAL-00001" summary="...">
       <option name="closed" value="true" />
