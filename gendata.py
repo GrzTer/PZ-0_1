@@ -56,4 +56,4 @@ def generate_daily_data(start_date, days=365, filename='data.csv'):
     print(f"Data for {n_days} days generated and appended to '{filename}'.")
 
 # Example usage
-generate_daily_data("2020-01-01", days=30)  # Adjust 'days' parameter as needed
+generate_daily_data("2020-01-01", days=365)  # Adjust 'days' parameter as needed
